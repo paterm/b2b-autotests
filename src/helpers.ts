@@ -14,7 +14,7 @@ interface I_FILL_TEXT_FIELD {
 
 export const fillTextField = async ({ page, xpath, name, value }: I_FILL_TEXT_FIELD) => {
   try {
-    const element = await page.waitForXPath(xpath)
+    const element = await page.waitForXPath(xpath, { timeout: 1000 })
 
     if (!element) {
       return Logger.error({ message: `Element not found: ${name}` })
@@ -22,6 +22,12 @@ export const fillTextField = async ({ page, xpath, name, value }: I_FILL_TEXT_FI
     await element.focus()
     await element.type(value)
   } catch (e) {
-    return Logger.error({ message: `Element error: ${name}` })
+    return Logger.error({ message: `Element error: ${name} ${e}` })
   }
+}
+
+export function delay(time: number): Promise<void> {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
 }
